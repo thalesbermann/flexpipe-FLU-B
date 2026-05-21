@@ -1,149 +1,179 @@
 # flexpipe-InfluenzaB
 
-Nextstrain pipeline for genomic epidemiology of Influenza B virus, segments HA and NA. This tool is derived from [flexpipe](https://github.com/InstitutoTodosPelaSaude/flexpipe) and adapted for Influenza B, similarly to how flexpipe-InfluenzaA was created for Influenza A.
+Nextstrain pipeline for genomic epidemiology of Influenza B virus (Victoria lineage), segments HA and NA. This tool is derived from [flexpipe](https://github.com/InstitutoTodosPelaSaude/flexpipe) and adapted for Influenza B, similarly to how flexpipe-RSV was created for respiratory syncytial virus.
 
 This repository contains all essential files to generate Influenza B Nextstrain builds for the HA and NA segments. Using this pipeline, users can perform genomic epidemiology analyses, visualize phylogeographic results, and track Influenza B spread based on genomic data and associated metadata.
 
-![Nextstrain panel with Influenza B overview](nextstrain_results.png)
-
----
-
 ## Getting Started
 
-To run this pipeline for Influenza B projects, see the instructions available in the original [flexpipe repository](https://github.com/InstitutoTodosPelaSaude/flexpipe), which covers Unix CLI navigation, installation of a Nextstrain environment with conda/mamba, and a step-by-step tutorial on generating a Nextstrain build (preparing, aligning, and visualizing genomic data).
+To run this pipeline, see the instructions available in the original [flexpipe repository](https://github.com/InstitutoTodosPelaSaude/flexpipe), which covers Unix CLI navigation, installation of a Nextstrain environment with conda/mamba, and a step-by-step tutorial on generating a Nextstrain build (preparing, aligning, and visualizing genomic data).
 
 ---
 
-## Dataset Retrieval and Quality Control
+## Builds
 
-### Dataset Retrieval (NCBI Virus)
+| Build | Segment | Reference | Nextclade dataset |
+|-------|---------|-----------|-------------------|
+| HA | Hemagglutinin | CY073893.1 (B/Brisbane/60/2008) | `flu-b-ha` |
+| NA | Neuraminidase | CY073894.1 (B/Brisbane/60/2008) | `flu-b-na` |
 
-Sequences were retrieved from NCBI Virus using the following filters:
-
-- Virus: Influenza B
-- Segment: HA or NA
-- Minimum coverage: ≥ 70% of the full segment length
-- Collection date: ≥ 2010
-
-### Quality Control (viralQC)
-
-Sequences were processed using [viralQC](https://github.com/InstitutoTodosPelaSaude/viralQC), which performs quality filtering and runs Nextclade internally to assign clades:
-
-```bash
-vqc run \
-  --input sequences.fasta \
-  --output-dir qc_output \
-  --output-file results.tsv \
-  --datasets-dir viralqc_datasets \
-  --blast-database viralqc_datasets/blast.fasta \
-  --blast-database-metadata viralqc_datasets/blast.tsv \
-  --cores 8 \
-  -v
-```
-
-Sequences were retained only if they met:
-
-- `genomeQuality` = A or B
-- Coverage ≥ 70%
-
-The viralQC output (containing `seqName` and `clade` columns) is used directly as input to the subsampling script. Sequences with missing or `unassigned` clades are excluded during subsampling.
+Each build lives in its own subdirectory (`HA/` and `NA/`) with independent `config/`, `data/`, `ingest/`, `phylogenetic/`, and `scripts/` folders.
 
 ---
 
-## Influenza B Subsampling (NCBI Virus Metadata)
-
-After QC, the dataset is subsampled using `subsample_FLU_B.py`:
-
-```bash
-python3 subsample_FLU_B.py \
-  --metadata metadata.tsv \
-  --nextclade viralqc_output.tsv \
-  --output-prefix FLU_B_HA
-```
-
-### Available Arguments
-
-| Argument | Default | Description |
-|---|---|---|
-| `--metadata` | *(required)* | Filtered post-QC metadata file |
-| `--nextclade` | *(required)* | viralQC output CSV/TSV containing `seqName` and `clade` columns |
-| `--output-prefix` | *(required)* | Prefix for output files |
-| `--start-year` | `2010` | Minimum collection year |
-| `--target-size` | `2000` | Target dataset size before final caps |
-| `--keep-country` | `Brazil` | Focal country — all sequences retained |
-| `--max-per-country-global` | `100` | Maximum sequences per country in the global dataset |
-| `--max-per-year-global` | `100` | Maximum sequences per year in the final dataset |
-
-### Filtering and Preprocessing
-
-- Retains only complete dates (`YYYY-MM-DD`)
-- Includes only sequences collected from **year 2010 onwards** (configurable via `--start-year`)
-- Metadata is merged with viralQC results (including clade assignments), matched by accession
-- Sequences with missing or `unassigned` clade are excluded
-- Country names are normalized using a built-in alias table (e.g. `United States of America` → `USA`)
-- A `region` column is inferred from country, grouping sequences into macro-regions (e.g. Latin America and the Caribbean, Eastern Asia, Sub-Saharan Africa)
-- Priority scores are computed for each sequence based on date completeness and sequence length, used to guide quality-aware subsampling
-
-### Subsampling Strategy
-
-The dataset is reduced to approximately 2,000 sequences (configurable via `--target-size`) while preserving geographic, temporal, and evolutionary diversity.
-
-**Brazil (focal country)**
-- No subsampling applied — all sequences retained
-
-**Global dataset**
-- Sampling unit: **region + year** (macro-region × year stratum)
-- Target per stratum: evenly distributed across all region+year combinations
-- **Clade diversity within each stratum:**
-  1. At least one sequence per full clade (rarest first)
-  2. At least one sequence per `clade_major` (first hierarchical level) among remaining sequences
-  3. Remaining slots filled by quality/recency priority (`date_precision_score` > `length_score` > `Collection_Date`)
-- **Cap per country:** maximum of **100 sequences per country** (excluding focal country)
-- **Cap per year:** maximum of **100 sequences per year** in the final dataset
-
-### Outputs
-
-The script generates two files:
-
-| File | Description |
-|---|---|
-| `{prefix}_with_clades.tsv` | Full post-QC metadata merged with clade assignments, before subsampling |
-| `{prefix}_subsampled.tsv` | Final filtered and subsampled metadata |
-
-Example output files using `--output-prefix FLU_B_HA` or `FLU_B_NA`:
+## Pipeline Overview
 
 ```
-FLU_B_HA_with_clades.tsv
-FLU_B_HA_subsampled.tsv
-
-FLU_B_NA_with_clades.tsv
-FLU_B_NA_subsampled.tsv
-```
-
-### Sequence Extraction
-
-Extract the corresponding sequences using:
-
-```bash
-cut -f1 FLU_B_HA_subsampled.tsv | tail -n +2 > keep_ids.txt
-seqkit grep -f keep_ids.txt sequences_HA.fasta -o subsampled_HA.fasta
+fetch_ncbi
+    └── merge_local_sequences  (ITpS sequences + NCBI)
+            └── viralqc        (Nextclade QC + clade assignment)
+                    └── curate_qc  (normalisation, dedup, filters)
+                            └── prepare  (subsampling)
+                                    ├── coordinates  (geocoding → latlongs.tsv)
+                                    ├── generate_name2hue  (colour palette)
+                                    └── colours  (colour_scheme.tsv)
+                                            └── [phylogenetic/Snakefile]
+                                                    align → mask → tree → refine
+                                                    → ancestral → translate → traits
+                                                    → clades → export → auspice/results.json
 ```
 
 ---
 
-## Adjustments for Influenza B Runs
+## Stage 1 — Ingest
 
-The Snakefile provided here is pre-configured for Influenza B — HA and NA segments. Since these are individual gene segments (not full genomes), no UTR trimming is applied — masking is set to 1 bp on both ends as a minimal placeholder. The clock rate is left undefined so that Nextstrain (augur) estimates it automatically from the data.
+Sequences and metadata are fetched from **NCBI Virus** using Entrez, filtered by taxonomy ID and segment-specific search terms.
 
-```python
-rule parameters:
-    params:
-        mask_5prime = 1,
-        mask_3prime = 1,
-        bootstrap = 1000,
-        model = "MFP",
-        root = "least-squares",
+| Parameter | HA | NA |
+|-----------|----|----|
+| `ncbi.taxid` | 11520 | 11520 |
+| `ncbi.genome_size` (bp) | 1758 | 1401 |
+| `ncbi.min_length` | 80% (≥ 1407 bp) | 80% (≥ 1121 bp) |
+| `ncbi.max_length` | 110% (≤ 1934 bp) | 110% (≤ 1541 bp) |
+| `ncbi.extra_search_term` | `"influenza B hemagglutinin"` | `"influenza B neuraminidase"` |
+| `ncbi.min_date` | 2015-01-01 | 2015-01-01 |
+
+Local ITpS sequences (in `data/new_sequences.fasta` + `data/new_metadata.tsv`) are merged with NCBI sequences at this stage.
+
+---
+
+## Stage 2 — QC and Curation
+
+**Nextclade** (via ViralQC wrapper) assigns clades and quality scores to every sequence. The `curate.py` script then:
+
+- Renames and standardises metadata fields (`strain`, `date`, `country`, `division`, `location`, `data_use`, `clade`)
+- Truncates clade names to a configurable number of hierarchy levels (`clade_levels`) for display grouping
+- Normalises the `host` field to canonical names (`human`, `swine`, `avian`, `ferret`, `dog`, etc.)
+- Infers geographic regions from country names
+- Deduplicates sequences, preferring local ITpS records
+
+**QC filters** applied by `augur filter`:
+
+| Parameter | Value |
+|-----------|-------|
+| `qc.nextclade_status` | `good`, `mediocre` |
+| `qc.min_coverage` | 0.80 |
+| Required columns | `strain`, `date`, `country`, `clade` |
+
+Sequences with Nextclade status `bad` or coverage below 80% are discarded.
+
+### Clade truncation
+
+Influenza B Victoria lineage follows a hierarchical nomenclature (e.g., `V1A.3a.2`). The pipeline truncates to 2 levels for display grouping:
+
+| Build | `clade_levels` | Example |
+|-------|---------------|---------|
+| HA | 2 | `V1A.3a.2` → `V1A.3a` |
+| NA | 2 | `V1A.3a.2` → `V1A.3a` |
+
+---
+
+## Stage 3 — Subsampling
+
+Controlled by `config/subsample.yaml`. Strategy: **focal** sequences (ITpS + all Brazil) are always kept in full; **context** sequences (outside Brazil) are subsampled by country × year × clade_truncated.
+
+```yaml
+defaults:
+  min_date: 2015
+
+samples:
+  focal:
+    query: "(source == 'ITpS') or (country == 'Brazil')"
+
+  context:
+    group_by: [country, year, clade_truncated]
+    sequences_per_group: 5
+    exclude_where:
+      - "country=Brazil"
+      - "clade_truncated="
+      - "date="
 ```
+
+Adjust `sequences_per_group` and `min_date` to control dataset size and temporal depth.
+
+---
+
+## Stage 4 — Coordinates and Colours
+
+**Coordinates**: `get_coordinates.py` queries Nominatim (OpenStreetMap) to geocode `country`, `division`, and `location` fields. Results are cached in `config/cache_coordinates.tsv` to avoid redundant API calls. The output `config/latlongs.tsv` is consumed by `augur export`.
+
+**Colours**: `generate_name2hue.py` assigns hues to each unique value in `clade_truncated`, `host`, `source`, `data_use`, and geographic columns. `colour_maker.py` produces the final `config/colour_scheme.tsv`.
+
+Colour columns configured in `config.yaml`:
+
+```yaml
+colours:
+  clade: "clade_truncated clade"
+  geo:   "region country division location"
+  host:  "host"
+  source: "source"
+  data_use: "data_use"
+```
+
+---
+
+## Stage 5 — Phylogenetic
+
+Run separately after ingest completes:
+
+```bash
+snakemake --snakefile phylogenetic/Snakefile --cores 8
+```
+
+Steps: `align` (MAFFT) → `mask` → `tree` (IQ-TREE 3 UFBoot) → `refine` (TreeTime) → `ancestral` → `translate` → `traits` → `clades` → `export` → `auspice/results.json`
+
+### Key phylogenetic parameters (`config.yaml`)
+
+| Parameter | Value | Description |
+|-----------|-------|-------------|
+| `parameters.model` | `MFP` | ModelFinder Plus — auto-selects best substitution model |
+| `parameters.ufboot` | `1000` | Ultrafast bootstrap replicates |
+| `parameters.root` | `least-squares` | Root method for time-calibrated tree |
+| `parameters.coalescent` | `skyline` | Effective population size model in TreeTime |
+| `parameters.date_inference` | `marginal` | Marginal date inference for ambiguous dates |
+| `parameters.divergence_units` | `mutations` | Branch length units in timetree |
+| `parameters.clock_filter_iqd` | `4` | IQD filter for clock outliers |
+| `parameters.ancestral_inference` | `joint` | Joint ancestral reconstruction |
+| `parameters.mask_5prime` | `1` | Bases masked at 5′ end |
+| `parameters.mask_3prime` | `1` | Bases masked at 3′ end |
+| `options.threads` | `8` | Threads for MAFFT and IQ-TREE |
+| `traits.columns` | `country division location clade` | Columns for ancestral trait inference |
+
+---
+
+## Configuration Files
+
+| File | Purpose |
+|------|---------|
+| `config/config.yaml` | All pipeline parameters (NCBI, QC, phylogenetic, colours) |
+| `config/subsample.yaml` | Subsampling strategy and group sizes |
+| `config/auspice_config.json` | Auspice display settings (colorings, filters, panels) |
+| `config/reference.gb` | Segment reference sequence in GenBank format |
+| `config/clades.tsv` | Clade definitions for `augur clades` |
+| `config/keep.txt` | Strains to always include |
+| `config/ignore.txt` | Strains to always exclude |
+| `data/new_sequences.fasta` | Local ITpS sequences |
+| `data/new_metadata.tsv` | Local ITpS metadata |
 
 ---
 
