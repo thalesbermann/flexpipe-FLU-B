@@ -12,12 +12,11 @@ To run this pipeline, see the instructions available in the original [flexpipe r
 
 ## Builds
 
-| Build | Segment | Reference | Nextclade dataset |
+| Build | Segment | Reference | Nextclade / ViralQC dataset |
 |-------|---------|-----------|-------------------|
 | HA | Hemagglutinin | CY073893.1 (B/Brisbane/60/2008) | `flu-b-ha` |
 | NA | Neuraminidase | CY073894.1 (B/Brisbane/60/2008) | `flu-b-na` |
 
-Each build lives in its own subdirectory (`HA/` and `NA/`) with independent `config/`, `data/`, `ingest/`, `phylogenetic/`, and `scripts/` folders.
 
 ---
 
@@ -26,7 +25,7 @@ Each build lives in its own subdirectory (`HA/` and `NA/`) with independent `con
 ```
 fetch_ncbi
     └── merge_local_sequences  (ITpS sequences + NCBI)
-            └── viralqc        (Nextclade QC + clade assignment)
+            └── viralqc        (BLAST + Nextclade QC + clade assignment)
                     └── curate_qc  (normalisation, dedup, filters)
                             └── prepare  (subsampling)
                                     ├── coordinates  (geocoding → latlongs.tsv)
@@ -72,11 +71,10 @@ Local ITpS sequences (in `data/new_sequences.fasta` + `data/new_metadata.tsv`) a
 
 | Parameter | Value |
 |-----------|-------|
-| `qc.nextclade_status` | `good`, `mediocre` |
+| `qc.genome_quality` | `A`, `B` (grades C and D discarded) |
 | `qc.min_coverage` | 0.80 |
 | Required columns | `strain`, `date`, `country`, `clade` |
 
-Sequences with Nextclade status `bad` or coverage below 80% are discarded.
 
 ### Clade truncation
 
