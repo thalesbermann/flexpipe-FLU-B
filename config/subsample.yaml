@@ -1,0 +1,32 @@
+# Subsampling configuration for Influenza B (HA)
+#
+# focal   : ITpS surveillance + all Brazil sequences — kept in full
+# context : NCBI sequences outside Brazil — subsampled by country/year/clade_truncated
+#
+# min_date 2015 cobre período pós-pandemia de gripe com dominância Victoria
+
+defaults:
+  min_date: 2015
+  exclude: config/ignore.txt
+
+samples:
+  focal_itps:
+    query: "source == 'ITpS'"
+    include: config/keep.txt
+
+  context:
+    exclude_where:
+      - "source=ITpS"
+      - "country=Brazil"
+      - "country="
+      - "clade_truncated="
+      - "clade_truncated=unassigned"
+      - "clade_truncated=Y1"
+      - "clade_truncated=Y2"
+      - "clade_truncated=Y3"
+      - "date="
+    group_by:
+      - country
+      - year
+      - clade_truncated
+    sequences_per_group: 20

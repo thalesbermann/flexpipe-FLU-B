@@ -1,0 +1,238 @@
+field	value	hex_color
+host	human	#0C88C5
+host	swine	#C5880C
+
+region	Africa	#C5490C
+region	Asia	#A6C50C
+region	Europe	#0CC549
+region	North America	#0C0CC5
+region	Oceania	#A60CC5
+region	South America	#C50C49
+
+country	Cameroon	#662200
+country	Comoros	#A73C07
+country	Ghana	#E25713
+country	Kenya	#E88454
+country	South Africa	#ECB398
+country	Uganda	#F5E0D6
+country	Bhutan	#556600
+country	China	#687C02
+country	Hong Kong	#7A9204
+country	India	#8CA707
+country	Iran	#9EBB0A
+country	Israel	#AFCF0E
+country	Japan	#C0E213
+country	Kazakhstan	#C9E924
+country	Malaysia	#CCE83C
+country	Nepal	#D0E854
+country	Philippines	#D4E96B
+country	Saudi Arabia	#D9EA82
+country	Singapore	#DEEC98
+country	South Korea	#E4EEAD
+country	Thailand	#EAF1C2
+country	Turkey	#F0F5D6
+country	Bulgaria	#006622
+country	France	#038B30
+country	Germany	#08AD3F
+country	Greece	#0ECF4E
+country	Italy	#1BE95F
+country	Netherlands	#44E87A
+country	Poland	#6BE994
+country	Russia	#91EBAE
+country	Spain	#B4EFC7
+country	United Kingdom	#D6F5E0
+country	Canada	#000066
+country	Guam	#0707A7
+country	Mexico	#1313E2
+country	Nicaragua	#5454E8
+country	Puerto Rico	#9898EC
+country	USA	#D6D6F5
+country	Australia	#8C07A7
+country	New Zealand	#DE98EC
+country	Brazil	#A7073C
+country	Peru	#EC98B3
+
+division		#F5D6E0
+division	Ngazidja	#842D02
+division	Ashanti Region	#A13906
+division	Upper East Region	#BD450B
+division	KCH	#D75211
+division	Matsangoni	#E9611F
+division	Mavueni	#E87741
+division	Mtondia	#E88D61
+division	Pingilikani	#EAA280
+division	Jinja	#ECB79E
+division	Mbale	#F0CCBA
+division	Soroti	#F5E0D6
+division	Guangdong	#607301
+division	Guizhou	#6B8102
+division	Hebei	#778D03
+division	Hubei	#819A05
+division	Inner Mongolia	#8CA707
+division	Jiangxi	#97B309
+division	Jilin	#A1BF0B
+division	Shanghai	#ABCB0E
+division	wuhan	#B6D610
+division	Kerala	#C0E213
+division	Osmanabad	#C7E91A
+division	Pune	#C9E929
+division	Sangli	#CBE837
+division	Aomori	#CEE846
+division	Fukushima	#D0E854
+division	Okinawa	#D3E862
+division	Yokosuka	#D5E970
+division	Kuala Lumpur	#D8EA7D
+division	Manila	#DBEB8B
+division	Riyadh	#DEEC98
+division	Gyeonbuk	#E1EDA5
+division	Gyeonggi	#E5EFB1
+division	Bangkok	#E8F1BE
+division	Hospital for Tropical Diseases	#ECF3CA
+division	Kamphaeng Phet	#F0F5D6
+division	Auvergne-Rhone-Alpes	#02822D
+division	PACA	#059C37
+division	Baden-Wurttemberg	#09B642
+division	Bayern	#0ECF4E
+division	Hessen	#14E659
+division	Leipzig	#30E86D
+division	Rheinland-Pfalz	#4EE880
+division	Friuli-Venezia Giulia	#6BE994
+division	Veneto	#87EAA8
+division	Moscow	#A3EDBB
+division	England	#BDF0CD
+division	Suffolk	#D6F5E0
+division	Alberta	#000066
+division	British Columbia	#00006B
+division	British_Columbia	#010170
+division	Ontario	#010175
+division	Quebec	#01017A
+division	Yigo	#020284
+division	Guanajuato	#030389
+division	Jalisco	#03038E
+division	Mexico City	#040493
+division	Morelos	#050597
+division	Puebla	#05059C
+division	Quintana Roo	#0606A1
+division	Tabasco	#0707A6
+division	Yucatan	#0707AA
+division	Managua	#0808AF
+division	San Juan	#0909B4
+division	Alabama	#0A0AB8
+division	Alaska	#0B0BBD
+division	Arizona	#0C0CC1
+division	Arkansas	#0C0CC6
+division	California	#0D0DCA
+division	Colorado	#0E0ECF
+division	Connecticut	#0F0FD3
+division	Delaware	#1111D7
+division	District of Columbia	#1212DC
+division	Florida	#1313E0
+division	Georgia	#1414E4
+division	Hawaii	#1515E8
+division	Idaho	#1A1AE9
+division	Illinois	#1F1FE9
+division	Indiana	#2525E9
+division	Iowa	#2A2AE9
+division	Kansas	#3030E8
+division	Kentucky	#3636E8
+division	Louisiana	#3B3BE8
+division	Maine	#4141E8
+division	Maryland	#4646E8
+division	Massachusetts	#4B4BE8
+division	Michigan	#5151E8
+division	Minnesota	#5656E8
+division	Missouri	#5B5BE8
+division	Montana	#6161E8
+division	Nebraska	#6666E9
+division	Nevada	#6B6BE9
+division	New Hampshire	#7070E9
+division	New Jersey	#7676E9
+division	New Mexico	#7B7BEA
+division	New York	#8080EA
+division	North Carolina	#8585EA
+division	North Dakota	#8A8AEB
+division	Ohio	#8F8FEB
+division	Oklahoma	#9494EB
+division	Oregon	#9999EC
+division	Pennsylvania	#9E9EEC
+division	Rhode Island	#A3A3ED
+division	SD	#A7A7EE
+division	South Carolina	#ACACEE
+division	South Dakota	#B1B1EF
+division	TEXAS	#B6B6EF
+division	Tennessee	#BABAF0
+division	Texas	#BFBFF1
+division	Virginia	#C4C4F2
+division	WA	#C8C8F2
+division	Washington	#CDCDF3
+division	West Virginia	#D1D1F4
+division	Wisconsin	#D6D6F5
+division	Sydney	#8C07A7
+division	Amazonas	#660022
+division	Bahia	#A7073C
+division	Distrito Federal	#E21357
+division	Rio de Janeiro	#E85484
+division	São Paulo	#EC98B3
+
+location		#F5D6E0
+location	Maternal and Child Health Hospital of Hubei Province,Wuhan	#8CA707
+location	Hulunbuir	#C0E213
+location	Changchun	#D0E854
+location	child hospital,Hubei	#DEEC98
+location	Bangkok	#F0F5D6
+location	Var, Toulon	#98ECB3
+location	Tempe	#0909B6
+location	King County	#3030E8
+location	Kitsap County	#8787EA
+location	Snohomish County	#D6D6F5
+location	Manaus	#660022
+location	Salvador	#950434
+location	Brasília	#C10B47
+location	Rio de Janeiro	#EA155B
+location	Ribeirão Preto	#E84A7E
+location	São José dos Campos	#EA7B9F
+location	São Paulo	#EEAAC0
+
+clade_truncated	A	#C50C0C
+clade_truncated	A.1	#C5690C
+clade_truncated	A.2	#C5C50C
+clade_truncated	A.3	#69C50C
+clade_truncated	C	#0CC50C
+clade_truncated	C.1	#0CC569
+clade_truncated	C.2	#0CC5C5
+clade_truncated	C.3	#0C69C5
+clade_truncated	C.4	#0C0CC5
+clade_truncated	C.5	#690CC5
+
+clade	A	#C50C0C
+clade	A.1	#A75707
+clade	A.1.1.3	#ECC398
+clade	A.2	#C5C50C
+clade	A.3	#336600
+clade	A.3.1	#60B609
+clade	A.3.1.1	#8EE830
+clade	A.3.2	#BAEA87
+clade	A.3.3	#E6F5D6
+clade	C	#0CC50C
+clade	C.1	#0CC569
+clade	C.2	#0CC5C5
+clade	C.3	#034587
+clade	C.3.1	#308EE8
+clade	C.3.2	#B8D4F0
+clade	C.4	#0C0CC5
+clade	C.5	#330066
+clade	C.5.1	#4A048F
+clade	C.5.2	#6009B6
+clade	C.5.3	#7711DB
+clade	C.5.4	#8E30E8
+clade	C.5.5	#A45DE8
+clade	C.5.6	#BA87EA
+clade	C.5.6.1	#D0B0EF
+clade	C.5.7	#E6D6F5
+
+source	ITpS	#69C50C
+source	NCBI	#0C88C5
+
+data_use	OPEN	#0C88C5
+data_use	RESTRICTED	#C50C0C
+
